@@ -3,6 +3,7 @@ Contributors: baekerIT
 Donate link:
 Tags: hetzner, server, administration
 Requires at least: 3.3
+Requires PHP: 5.6
 Tested up to: 4.9.2
 Stable tag: 1.0
 License: GPLv2 or later
@@ -40,4 +41,6 @@ You can create new Server instances in Hetzner Online Cloud. In future Versions 
 
 
 == Arbitrary section 1 ==
+
+
 
