@@ -8,7 +8,6 @@
 
 class Hetzner_Cloud_Control_Remote_API {
 
-	const TOKEN = 'ZD1hjuIZY6ccboLIMmB7zV7yu2Xor0LxFm2yZIuXhDexFXb1x50il7AUsvCCESyx';
 	static $curl;
 	static protected $url = 'https://api.hetzner.cloud/v1';
 
