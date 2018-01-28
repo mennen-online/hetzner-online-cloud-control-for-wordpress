@@ -1,0 +1,16 @@
+<div class="wrap">
+    <label for="hcc_api_token">Hetzner Online Cloud API Token</label>
+    <input type="text" id="hcc_token" value="<?php echo get_option( 'hcc_token' ) ?>"/>
+    <button type="button">API Token speichern</button>
+    <script>
+      function saveToken() {
+        var token = jQuery('#hcc_token').val();
+        jQuery.ajax('<?php echo admin_url( 'admin-ajax.php' ) ?>', {
+          action: 'hcc_saveToken',
+          token: token,
+        }).success(function(response) {
+          alert(response);
+        });
+      }
+    </script>
+</div>

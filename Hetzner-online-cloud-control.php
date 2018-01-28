@@ -23,6 +23,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 		} else {
 			add_action( 'admin_menu', [ $this, 'setup_menu' ] );
 		}
+		add_action( 'wp_ajax_hcc_saveToken', [ $this, 'hcc_saveApiToken' ] );
 		if ( is_admin() ) {
 			wp_enqueue_style( 'bootstrap', plugin_dir_path( __FILE__ ) . 'assets/css/bootstrap.min.css' );
 			wp_enqueue_script( 'bootstrap_js', plugin_dir_path( __FILE__ ) . 'assets/js/bootstrap.min.js' );
@@ -57,6 +58,20 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 		$image = filter_input( INPUT_POST, 'image' );
 
 		return Hetzner_Cloud_Control_Remote_API::createNewServer( $name, $server_type, $image );
+	}
+
+	public function init_setup() {
+
+	}
+
+	public function hcc_saveApiToken() {
+		$token = filter_input( INPUT_POST, 'hcc_token' );
+		update_option( 'hcc_token', $token );
+
+		return [
+			'status' => 'success',
+			'value'  => $token
+		];
 	}
 }
 
