@@ -1,0 +1,108 @@
+<div class="wrap">
+    <button class="btn btn-primary" role="button" data-toggle="createServer" href="#createServer" aria-expanded="false"
+            aria-controls="createServer">
+        Create a new Server
+    </button>
+    <div class="collapse" id="createServer">
+        <div class="well">
+            <div class="col-md-4">
+                <label for="createServerName">New Server Name</label>
+                <input type="text" id="createServerName" class="form-control"/>
+            </div>
+            <div class="col-md-4">
+                <select id="createServerType" class="form-control">
+                    <option selected disabled>Select a Server Type</option>
+					<?php
+					foreach ( Hetzner_Cloud_Control_Remote_API::getAllServerTypes() as $type ):
+						?>
+                        <option value="<?php echo $type->name ?>"><?php echo $type->description ?></option>
+					<?php
+					endforeach;
+					?>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="createServerImage" class="form-control">
+                    <option selected disabled>Select a Server OS Image</option>
+					<?php
+					foreach ( Hetzner_Cloud_Control_Remote_API::getAllImages() as $image ):
+						?>
+                        <option value="<?php echo $image->name ?>"><?php echo $image->description ?></option>
+					<?php
+					endforeach;
+					?>
+                </select>
+            </div>
+            <div class="col-md-12">
+                <button type="button" onclick="createServer()">Create your new Server</button>
+            </div>
+            <script>
+              function createServer() {
+                var name = jQuery('#createServerName').val();
+                var type = jQuery('#createServerType').val();
+                var image = jQuery('#createServerImage').val();
+                jQuery.ajax('<?php echo admin_url( 'admin-ajax.php' ) ?>', {
+                  action: 'createNewServer',
+                  name: name,
+                  type: type,
+                  image: image,
+                }).success(function(response) {
+                  alert(response);
+                });
+              }
+            </script>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Erstellt</th>
+            <th>IPv4</th>
+            <th>IPv6</th>
+        </tr>
+        </thead>
+        <tbody>
+		<?php
+		foreach ( Hetzner_Cloud_Control_Remote_API::getAllServers() as $server ):
+			?>
+            <tr>
+                <td><?php
+					echo $server->id
+					?></td>
+                <td><?php
+					echo $server->name
+					?></td>
+                <td><?php
+					echo $server->status
+					?></td>
+                <td><?php
+					echo $server->created
+					?></td>
+                <td><?php
+					if ( ! $server->public_net->ipv4->blocked ):
+						echo '<span style="color:green">';
+						echo $server->public_net->ipv4->ip;
+					else:
+						echo '<span style="color:red">';
+					endif;
+					?>
+                    </span></td>
+                <td><?php
+					if ( ! $server->public_net->ipv6->blocked ):
+						echo '<span style="color:green">';
+						echo $server->public_net->ipv6->ip;
+					else:
+						echo '<span style="color:red">';
+					endif;
+					?>
+                    </span></td>
+            </tr>
+		<?php
+		endforeach;
+		?>
+        </tbody>
+    </table>
+</div>
