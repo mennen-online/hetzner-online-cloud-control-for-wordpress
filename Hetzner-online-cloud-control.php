@@ -61,7 +61,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 	}
 
 	public function init_setup() {
-
+		include plugin_dir_path( __FILE__ ) . 'resources/views/configuration.phtml';
 	}
 
 	public function hcc_saveApiToken() {
