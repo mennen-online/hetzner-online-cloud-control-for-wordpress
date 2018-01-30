@@ -66,7 +66,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 
 	public function hcc_saveApiToken() {
 		$token = filter_input( INPUT_POST, 'hcc_token' );
-		update_option( 'hcc_token', $token );
+		update_option( self::API_TOKEN, $token );
 
 		return [
 			'status' => 'success',
