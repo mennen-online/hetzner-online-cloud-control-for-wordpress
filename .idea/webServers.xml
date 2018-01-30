@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c24c164b-9a31-4d1a-8c87-c5be738b8050" name="Bäker IT" url="http://baeker-it.de">
+        <fileTransfer host="baeker-it.de" port="21" rootFolder="/hetzner-cloud-control.baeker-it.de">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

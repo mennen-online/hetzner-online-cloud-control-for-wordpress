@@ -41,6 +41,10 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 		] );
 	}
 
+	public function hcc_overview(){
+        include plugin_dir_path(__FILE__).'resources/views/welcome.phtml';
+    }
+
 	public function setup_menu() {
 	    add_submenu_page('bit_hcc', 'API Token', 'API Token Settings', 'manage_options', 'bit_hcc_setup', [$this, 'init_setup']);
 	}
