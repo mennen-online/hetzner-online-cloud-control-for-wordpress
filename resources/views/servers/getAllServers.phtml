@@ -1,5 +1,5 @@
 <div class="wrap">
-    <button class="btn btn-primary" role="button" data-toggle="createServer" href="#createServer" aria-expanded="false"
+    <button class="btn btn-primary" role="button" data-toggle="collapse" data-target="#createServer" aria-expanded="false"
             aria-controls="createServer">
         Create a new Server
     </button>
@@ -10,31 +10,31 @@
                 <input type="text" id="createServerName" class="form-control"/>
             </div>
             <div class="col-md-4">
-                <select id="createServerType" class="form-control">
+                <select id="createServerType" class="">
                     <option selected disabled>Select a Server Type</option>
 					<?php
-					foreach ( Hetzner_Cloud_Control_Remote_API::getAllServerTypes() as $type ):
-						?>
-                        <option value="<?php echo $type->name ?>"><?php echo $type->description ?></option>
-					<?php
-					endforeach;
+                        foreach (Hetzner_Cloud_Control_Remote_API::getAllServerTypes()->server_types as $type):
+                            ?>
+                            <option value="<?php echo $type->name ?>"><?php echo $type->description ?></option>
+                        <?php
+                        endforeach;
 					?>
                 </select>
             </div>
             <div class="col-md-4">
-                <select id="createServerImage" class="form-control">
+                <select id="createServerImage" class="">
                     <option selected disabled>Select a Server OS Image</option>
 					<?php
-					foreach ( Hetzner_Cloud_Control_Remote_API::getAllImages() as $image ):
-						?>
-                        <option value="<?php echo $image->name ?>"><?php echo $image->description ?></option>
-					<?php
-					endforeach;
-					?>
+                        foreach (Hetzner_Cloud_Control_Remote_API::getAllImages()->images as $image):
+                            ?>
+                            <option value="<?php echo $image->name ?>"><?php echo $image->description ?></option>
+                        <?php
+                        endforeach;
+                        ?>
                 </select>
             </div>
             <div class="col-md-12">
-                <button type="button" onclick="createServer()">Create your new Server</button>
+                <button type="button" class="btn btn-success" onclick="createServer()">Create your new Server</button>
             </div>
             <script>
               function createServer() {
@@ -66,7 +66,7 @@
         </thead>
         <tbody>
 		<?php
-		foreach ( Hetzner_Cloud_Control_Remote_API::getAllServers() as $server ):
+		foreach ( Hetzner_Cloud_Control_Remote_API::getAllServers()->servers as $server ):
 			?>
             <tr>
                 <td><?php

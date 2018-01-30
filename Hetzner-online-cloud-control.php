@@ -19,14 +19,14 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 	public function __construct() {
 		if ( get_option( self::API_TOKEN ) != null ) {
 			add_action( 'admin_menu', [ $this, 'admin_menus' ] );
-			add_action( 'wp_ajax_createNewServer' . [ $this, 'hcc_createNewServer' ] );
+			add_action( 'wp_ajax_createNewServer' , [ $this, 'hcc_createNewServer' ] );
+            add_action( 'admin_menu', [ $this, 'setup_menu' ] );
 		} else {
-			add_action( 'admin_menu', [ $this, 'setup_menu' ] );
 		}
 		add_action( 'wp_ajax_hcc_saveToken', [ $this, 'hcc_saveApiToken' ] );
 		if ( is_admin() ) {
-			wp_enqueue_style( 'bootstrap', plugin_dir_path( __FILE__ ) . 'assets/css/bootstrap.min.css' );
-			wp_enqueue_script( 'bootstrap_js', plugin_dir_path( __FILE__ ) . 'assets/js/bootstrap.min.js' );
+			wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'assets/css/bootstrap.min.css' );
+			wp_enqueue_script( 'bootstrap_js', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap.min.js', ['jquery'], false, true );
 		}
 	}
 
@@ -42,10 +42,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 	}
 
 	public function setup_menu() {
-		add_menu_page( 'Hetzner Cloud Control Installation', 'Hetzner Cloud Control', 'manage_options', 'bit_hcc_setup', [
-			$this,
-			'init_setup'
-		] );
+	    add_submenu_page('bit_hcc', 'API Token', 'API Token Settings', 'manage_options', 'bit_hcc_setup', [$this, 'init_setup']);
 	}
 
 	public function hcc_serverView() {
@@ -65,7 +62,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 	}
 
 	public function hcc_saveApiToken() {
-		$token = filter_input( INPUT_POST, 'hcc_token' );
+		$token = filter_input( INPUT_POST, 'token' );
 		update_option( self::API_TOKEN, $token );
 
 		return [

@@ -11,46 +11,41 @@ class Hetzner_Cloud_Control_Remote_API {
 	static $curl;
 	static protected $url = 'https://api.hetzner.cloud/v1';
 
-	public static function getAllServers() {
-		self::$curl = curl_init();
-		curl_setopt( self::$curl, CURLOPT_URL, self::$url . '/servers' );
-		curl_setopt( self::$curl, CURLOPT_HEADER, [ 'Authorization: Bearer ' . self::TOKEN ] );
-		$response = curl_exec( self::$curl );
+    private static function setupCurl($url, $post = false, $postfields = []){
+        self::$curl = curl_init();
+        $header = [];
+        $header[] = 'Authorization: Bearer '.get_option(baekerIT_Hetzner_Cloud_Control::API_TOKEN);
+        $header[] = 'Accept: */*';
+        $header[] = 'Cache-Control: no-cache';
+        curl_setopt( self::$curl, CURLOPT_URL, self::$url . $url );
+        curl_setopt( self::$curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, true);
+        if($post){
+            curl_setopt( self::$curl, CURLOPT_POST, true );
+            curl_setopt( self::$curl, CURLOPT_POSTFIELDS, $postfields );
+        }
+        $response = curl_exec(self::$curl);
+        return json_decode($response);
+    }
 
-		return json_decode( $response );
+	public static function getAllServers() {
+		return self::setupCurl('/servers');
 	}
 
 	public static function getAllServerTypes() {
-		self::$curl = curl_init();
-		curl_setopt( self::$curl, CURLOPT_URL, self::$url . '/server_types' );
-		curl_setopt( self::$curl, CURLOPT_HEADER, [ 'Authorization: Bearer ' . self::TOKEN ] );
-		$response = curl_exec( self::$curl );
-
-		return json_decode( $response );
+	    return self::setupCurl('/server_types');
 	}
 
 	public static function getAllImages() {
-		self::$curl = curl_init();
-		curl_setopt( self::$curl, CURLOPT_URL, self::$url . '/images' );
-		curl_setopt( self::$curl, CURLOPT_HEADER, [ 'Authorization: Bearer ' . self::TOKEN ] );
-		$response = curl_exec( self::$curl );
-
-		return json_decode( $response );
+	    return self::setupCurl('/images');
 	}
 
 	public static function createNewServer( $name, $type, $image ) {
-		self::$curl = curl_init();
-		curl_setopt( self::$curl, CURLOPT_URL, self::$url . '/servers' );
-		curl_setopt( self::$curl, CURLOPT_POST, true );
-		curl_setopt( self::$curl, CURLOPT_POSTFIELDS, [
-			'name'  => $name,
-			'type'  => $type,
-			'image' => $image
-		] );
-		curl_setopt( self::$curl, CURLOPT_HEADER, [ 'Authorization: Bearer ' . self::TOKEN ] );
-		$response = curl_exec( self::$curl );
-
-		return json_decode( $response );
+	    return self::setupCurl('/servers', true, [
+	        'name' => $name,
+            'type' => $type,
+            'image' => $image
+        ]);
 	}
 
 }
