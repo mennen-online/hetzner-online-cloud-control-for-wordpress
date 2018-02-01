@@ -4,7 +4,7 @@
 Plugin Name: Hetzner Online Cloud Control
 Plugin URI: https://baeker-it.de
 Description: Take the full Control of your Hetzner Cloud!
-Version: 1.0
+Version: 1.0.1
 Author: Hendrik Bäker
 Author URI: http://baeker-it.de
 License: GPL2
@@ -20,6 +20,7 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 		if ( get_option( self::API_TOKEN ) != null ) {
 			add_action( 'admin_menu', [ $this, 'admin_menus' ] );
 			add_action( 'wp_ajax_createNewServer' , [ $this, 'hcc_createNewServer' ] );
+			add_action('wp_ajax_hcc_changeName', [$this, 'hcc_changeName']);
             add_action( 'admin_menu', [ $this, 'setup_menu' ] );
 		} else {
 		}
@@ -64,6 +65,12 @@ class baekerIT_Hetzner_Cloud_Control extends Hetzner_Cloud_Control_Remote_API {
 	public function init_setup() {
 		include plugin_dir_path( __FILE__ ) . 'resources/views/configuration.phtml';
 	}
+
+	public function hcc_changeName(){
+	    $id = filter_input(INPUT_POST, 'server_id');
+	    $name = filter_input(INPUT_POST, 'name');
+	    return Hetzner_Cloud_Control_Remote_API::changeServerName($id, $name);
+    }
 
 	public function hcc_saveApiToken() {
 		$token = filter_input( INPUT_POST, 'token' );

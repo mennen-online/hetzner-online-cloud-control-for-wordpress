@@ -41,13 +41,21 @@
                 var name = jQuery('#createServerName').val();
                 var type = jQuery('#createServerType').val();
                 var image = jQuery('#createServerImage').val();
-                jQuery.ajax('<?php echo admin_url( 'admin-ajax.php' ) ?>', {
-                  action: 'createNewServer',
-                  name: name,
-                  type: type,
-                  image: image,
-                }).success(function(response) {
-                  alert(response);
+                jQuery.ajax({
+                   url: '<?php echo admin_url('admin-ajax.php') ?>',
+                   method: 'POST',
+                   data: {
+                       action: 'createNewServer',
+                       name: name,
+                       type: type,
+                       image: image
+                   },
+                   success: function(response){
+                       alert(response);
+                       jQuery('#createServerName').val('');
+                       jQuery('#createServerType').val('');
+                       jQuery('#createServerImage').val('');
+                   }
                 });
               }
             </script>
@@ -68,13 +76,12 @@
 		<?php
 		foreach ( Hetzner_Cloud_Control_Remote_API::getAllServers()->servers as $server ):
 			?>
-            <tr>
+            <tr id="server_<?php echo $server->id ?>">
                 <td><?php
 					echo $server->id
 					?></td>
-                <td><?php
-					echo $server->name
-					?></td>
+                <td>
+                    <input type="text" value="<?php echo $server->name ?>" id="<?php echo $server->id?>_name"></td>
                 <td><?php
 					echo $server->status
 					?></td>
@@ -99,10 +106,47 @@
 					endif;
 					?>
                     </span></td>
+                <td>
+                    <button type="button" class="btn btn-warning" onclick="changeName(<?php echo $server->id ?>)">Aktualisieren</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="deleteServer(<?php echo $server->id ?>)">Löschen</button>
+                </td>
             </tr>
 		<?php
 		endforeach;
 		?>
         </tbody>
+        <script>
+            function changeName(id){
+                var name = jQuery('#'+id+'_name').val();
+                jQuery.ajax({
+                    url: '<?php echo admin_url('admin-ajax.php') ?>',
+                    method: 'POST',
+                    data: {
+                        action: 'hcc_changeName',
+                        server_id: id,
+                        name: name,
+                    },
+                    success: function(response){
+                        jQuery('#server_'+id).setAttribute('style', 'background:yellow');
+                    }
+                })
+            }
+
+            function deleteServer(id){
+                jQuery.ajax({
+                    url: '<?php echo admin_url('admin-ajax.php') ?>',
+                    method: 'POST',
+                    data: {
+                        action: 'hcc_deleteServer',
+                        id: id
+                    },
+                    success: function(response){
+                        jQuery('#server_'+id).setAttribute('style', 'background:red');
+                    }
+                })
+            }
+        </script>
     </table>
 </div>

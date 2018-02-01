@@ -34,6 +34,10 @@ You can create new Server instances in Hetzner Online Cloud. In future Versions 
 
 == Changelog ==
 
+= 1.1 =
+
+Complete Basic Functions: You are now able, to Change Server Names and delete them.
+
 
 
 == Upgrade notice ==
